@@ -1,0 +1,1 @@
+{ "name": "clawd", "version": "0.1.0", "description": "A little Claude crab above the prompt that scuttles while Claude works", "types": "./types/index.d.ts", "license": "MIT" }

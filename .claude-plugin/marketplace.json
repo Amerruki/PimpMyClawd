@@ -1,0 +1,19 @@
+{
+  "name": "PimpMyClawd",
+  "owner": {
+    "name": "Amerruki"
+  },
+  "description": "Mods for Claude: themes, panes, status lines, commands and hooks",
+  "plugins": [
+    {
+      "name": "clawd",
+      "source": "./clawd",
+      "description": "A little Claude crab above the prompt that scuttles while Claude works"
+    },
+    {
+      "name": "looks",
+      "source": "./looks",
+      "description": "Themes for the Claude desktop and mobile apps, switched with /skin"
+    }
+  ]
+}
