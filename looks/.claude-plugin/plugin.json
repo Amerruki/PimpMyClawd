@@ -1,1 +1,1 @@
-{ "name": "looks", "version": "0.1.0", "description": "Themes for the Claude desktop and mobile apps, switched with /skin", "license": "MIT", "types": "./types/index.d.ts" }
+{ "name": "looks", "version": "0.1.1", "description": "Themes for the Claude desktop and mobile apps, switched with /skin", "license": "MIT", "types": "./types/index.d.ts" }
