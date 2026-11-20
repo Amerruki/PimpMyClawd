@@ -58,6 +58,31 @@ export function readRealFeed($: EngineInterface): Promise<LooksFeed> {
   return read($, feed)
 }
 
+// The REFRESH_MS slot of the clock the live scene was last drawn in. A new
+// slot draws it again, which brings back a scene the app stilled while the
+// machine was busy; otherwise it would wait for the next turn's edge.
+const slot = atom({ plugin: 'looks', key: 'slot' } as const, 0)
+
+// Read while drawing, it subscribes the drawing to the slot.
+export async function readSlot($: EngineInterface): Promise<number> {
+  try {
+    return await read($, slot)
+  } catch {
+    return 0
+  }
+}
+
+// Idempotent, so a second timer left over from a reload draws nothing extra.
+export async function setSlot($: EngineInterface, value: number): Promise<void> {
+  try {
+    if ((await read($, slot)) !== value) {
+      await update($, slot, () => value)
+    }
+  } catch {
+    // The scene redraws at the next turn instead.
+  }
+}
+
 const armed = atom({ plugin: 'looks', key: 'armed' } as const, null as LooksArmed | null)
 
 // Read while drawing, it subscribes the drawing, so arming redraws the scene.

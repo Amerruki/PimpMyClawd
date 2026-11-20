@@ -1,4 +1,4 @@
-import type { EngineInterface, Register, ThemeSetArgs } from 'claude-code'
+import type { EngineInterface, Register, ThemeSetArgs, Timer } from 'claude-code'
 
 import type { LooksArmed, LooksFeed } from '../types'
 
@@ -15,7 +15,7 @@ import { AERO_ECO } from './aero-eco'
 import { AERO_ZEN } from './aero-zen'
 import { CYBERPUNK2, cyberpunk2Scene } from './cyber2'
 import { endTurn, markCompaction, registerFeed, startFeed, startTurn } from './feed-hooks'
-import { readArmed, readEpoch, readFeed, readRealFeed, readSceneFeed, setArmed, setSim, startEpoch } from './feed-state'
+import { readArmed, readEpoch, readFeed, readRealFeed, readSceneFeed, readSlot, setArmed, setSim, setSlot, startEpoch } from './feed-state'
 import { hoistInlineStyles } from './hoist'
 import { hasSvgFilter } from './kit'
 import { MATRIX, MATRIX_CYAN, MATRIX_MAGENTA, MATRIX_ORANGE } from './matrix'
@@ -163,13 +163,20 @@ function forceArgs(args: ThemeSetArgs, m: Mode): ThemeSetArgs {
 // Each live scene's last drawn text and the source returned for it. A redraw
 // whose text matches hands back the same source, so the app keeps the frame
 // it has instead of loading it again.
-const lastDrawn = new Map<string, { text: string; source: string }>()
+const lastDrawn = new Map<string, { text: string; slot: number; source: string }>()
+
+// The app stills a scene whose drawing gets too slow, as it can while the
+// machine is busy, and plays it again only when the scene is drawn anew. Live
+// scenes are drawn anew at least this often, so a still never lasts longer.
+const REFRESH_MS = 5 * 60 * 1000
+let refresh: Timer | undefined
 
 async function liveSource($: EngineInterface, key: string, draw: (f: LooksFeed) => string): Promise<string> {
   const text = hoistInlineStyles(forceScene(draw({ ...(await readSceneFeed($)), armed: await readArmed($) }), mode))
+  const slot = await readSlot($)
   const prior = lastDrawn.get(`${key}:${mode}`)
 
-  if (prior?.text === text) {
+  if (prior?.text === text && prior.slot === slot) {
     return prior.source
   }
   const epoch = await readEpoch($)
@@ -178,7 +185,7 @@ async function liveSource($: EngineInterface, key: string, draw: (f: LooksFeed) 
   // its animations where the last one had them.
   const source = phaseShift(text, epoch > 0 ? (now - epoch) / 1000 : 0)
 
-  lastDrawn.set(`${key}:${mode}`, { text, source })
+  lastDrawn.set(`${key}:${mode}`, { text, slot, source })
 
   return source
 }
@@ -416,6 +423,12 @@ export const register: Register = on => {
       description: 'Switch the app skin: /skin <name> [dark|light|auto], /skin help',
     })
     await startFeed($)
+    const toSlot = async () => setSlot($, Math.floor((await $.clock.now()) / REFRESH_MS))
+    await toSlot()
+    refresh?.cancel()
+    refresh = $.clock.every(REFRESH_MS, () => {
+      void toSlot()
+    })
     const stored = await $.store.get('look')
     const known = typeof stored === 'string' ? resolveName(stored) : ''
     const name = known === OFF || known in LOOKS ? known : DEFAULT_LOOK

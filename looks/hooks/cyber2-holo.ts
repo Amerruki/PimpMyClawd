@@ -3,8 +3,9 @@ import type { Rect } from './cyber2-kit'
 // Projected panels: every session display in the ward is light, not a box.
 // A thin tinted field the building shows through, scan lines, a bright top
 // and bottom edge, corner brackets, a band of light sweeping down, and the
-// fan of the emitter that throws it. The text over it carries its own
-// outline so it reads on lit windows by day and night.
+// fan of the emitter that throws it. The field is tinted just deep enough for
+// the text over it to read on lit windows by day and night; outlined text
+// would read too, but it costs the app more to draw than anything else here.
 
 export type HoloOpts = {
   // Where the emitter sits: a fan of light from below or above, or none.
@@ -62,10 +63,9 @@ export const HOLO_DEFS =
   fanDef('hfau', '#ffb02e', true)
 
 // Day: a deeper tint so light lettering holds on bright stone and glass.
-// Night: the field is barely there and the light carries it.
+// Night: a lighter tint, still deep enough for text over lit windows.
 export const HOLO_CSS =
-  `:root,svg{--hdo:.4;--hfo:.2;--to:#08262e}` +
-  `@media (prefers-color-scheme: dark){:root,svg{--hdo:.2;--hfo:.13;--to:rgba(3,6,24,.7)}}` +
+  `:root,svg{--hdo:.52;--hfo:.2}` +
+  `@media (prefers-color-scheme: dark){:root,svg{--hdo:.32;--hfo:.13}}` +
   `.hd{fill:#0a2630;fill-opacity:var(--hdo)}.hf{fill-opacity:var(--hfo)}` +
-  `.hx text{stroke:var(--to);stroke-width:2.6px;paint-order:stroke;stroke-linejoin:round}` +
   `.hsw{animation:hsw 5.3s linear infinite}@keyframes hsw{from{transform:translateY(0)}to{transform:translateY(var(--sw,120px))}}`

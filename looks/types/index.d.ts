@@ -86,7 +86,8 @@ declare module 'claude-code' {
       sim: Shaped<LooksFeed | null>
       /** A control waiting for its confirming second click; null when none. */
       armed: LooksArmed | null
-
+      /** Which five-minute slot of the clock the live scene was last drawn in. */
+      slot: number
     }
   }
 }

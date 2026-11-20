@@ -111,7 +111,7 @@ export function rightDisplays(): string {
     `<text class="jp" x="${e.x + 20}" y="160" font-size="22" text-anchor="middle" fill="#fff"><tspan x="${e.x + 20}">ネ</tspan><tspan x="${e.x + 20}" dy="34">オ</tspan><tspan x="${e.x + 20}" dy="34">ン</tspan><tspan x="${e.x + 20}" dy="34">街</tspan></text>`
 
   return (
-    `<g class="g-r hx">` +
+    `<g class="g-r">` +
     screen +
     band +
     MARK.purge +

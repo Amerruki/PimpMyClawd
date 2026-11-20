@@ -171,3 +171,54 @@ test('the cyberpunk scene shows working, an emergency while compacting, then all
   expect(idle).not.toContain('ALL CLEAR')
   await ui.unmount()
 })
+
+test('a live scene is drawn anew every five minutes, so a still never outlasts that', async ($, on) => {
+  let now = Date.parse('2026-11-20T09:01:00Z')
+  on('clock.now', () => ({ value: now }))
+  on('command.register', () => ({ value: { command: 'skin' } }))
+  on('session.root', () => ({ value: '/x/Proj' }))
+  on('session.model', () => ({ value: 'm' }))
+  on('process.run', () => ({ value: { exitCode: 1, stdout: '', stderr: '', isStdoutTruncated: false, isStderrTruncated: false } }))
+  on('store.get', () => ({ value: 'cyberpunk' }))
+  on('theme.set', () => ({ value: { isDrawn: true, requestId: 't' } }))
+  on('session.start', (_, e) => ({ cwd: e.cwd }))
+  // Each period resolves when the test says so.
+  const periods: number[] = []
+  let tick = () => {}
+  on('clock.every', (_, e) => {
+    periods.push(e.ms)
+
+    return new Promise<{ value: undefined }>(resolve => {
+      tick = () => resolve({ value: undefined })
+    })
+  })
+
+  await $.session.start({ cwd: '/x/Proj', surface: 'desktop', isInteractive: true })
+  expect(periods).toEqual([5 * 60 * 1000])
+
+  const ui = await $.ui.mount(backdrop('cyberpunk--abc'))
+  const source = async () => String(((await ui.find({ type: 'Svg' })) as { props?: { source?: string } } | undefined)?.props?.source)
+  const first = await source()
+  const settle = async (from: string) => {
+    for (let i = 0; i < 50; i++) {
+      const s = await source()
+      if (s !== from) return s
+    }
+
+    return source()
+  }
+
+  // Still in the same slot: nothing to draw.
+  now += 60 * 1000
+  tick()
+  expect(await settle(first)).toBe(first)
+
+  // The next slot draws the same scene afresh.
+  now += 5 * 60 * 1000
+  tick()
+  const fresh = await settle(first)
+  expect(fresh).not.toBe(first)
+  expect(first).toContain('待機中')
+  expect(fresh).toContain('待機中')
+  await ui.unmount()
+})

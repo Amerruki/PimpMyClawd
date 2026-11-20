@@ -90,7 +90,7 @@ const BODY =
   peopleFar() +
   stall() +
   cart() +
-  `<g class="g-l">${hologram()}<g class="hx">${rationDial()}${boardDisplay()}${kioskDisplay()}</g></g>` +
+  `<g class="g-l">${hologram()}${rationDial()}${boardDisplay()}${kioskDisplay()}</g>` +
   rightDisplays() +
   peopleNear() +
   drones() +
