@@ -17,13 +17,13 @@ import type { Look } from './look'
 
 const { theme, problems } = makeColors({
   label: 'Cyberpunk',
-  codeTheme: { light: 'rose-pine-dawn', dark: 'synthwave-84' },
+  codeTheme: { light: 'catppuccin-latte', dark: 'synthwave-84' },
   roles: { accent: '#c8197e', danger: '#d0283a', success: '#1c8a4c', warning: '#8f6000', pro: '#0b7f9e' },
   light: {
     gray: {
-      anchors: { 'surface-0': '#e9e5d6', 'surface-1': '#f0ede0', 'surface-2': '#f7f5ec', 'text-primary': '#1f1c24', 'text-secondary': '#3d394a', 'text-muted': '#595466' },
+      anchors: { 'surface-0': '#e4e1f3', 'surface-1': '#ecebf9', 'surface-2': '#f5f4fd', 'text-primary': '#171230', 'text-secondary': '#362d58', 'text-muted': '#554c7c' },
     },
-    git: { added: '#17703a', removed: '#b8243a', modified: '#875800', merged: '#0a6680', closed: '#b8243a', conflicting: '#a04a08', draft: '#55526a' },
+    git: { added: '#17703a', removed: '#b8243a', modified: '#875800', merged: '#0a6680', closed: '#b8243a', conflicting: '#a04a08', draft: '#554c7c' },
   },
   dark: {
     roles: { accent: '#ff3fb4', danger: '#ff4a3d', success: '#3cf08a', warning: '#ffc21a', pro: '#22e6ff' },

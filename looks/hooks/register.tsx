@@ -289,8 +289,10 @@ async function apply($: EngineInterface, name: string): Promise<string> {
     $.ui.toast(`${look.label} has an SVG filter, so the app shows it as a still picture.`)
   }
   const wanted = (await storedModes($))[name] ?? 'auto'
-  // A look made for one mode only can't be forced into the other.
-  mode = wanted !== 'auto' && !hasMode(look, wanted) ? 'auto' : wanted
+  // A skin with a palette for one mode only always draws in that mode: its
+  // scene is pinned to it, and the palette asks the app for it too.
+  const only: Mode | undefined = !hasMode(look, 'light') ? 'dark' : !hasMode(look, 'dark') ? 'light' : undefined
+  mode = only ?? (wanted !== 'auto' && !hasMode(look, wanted) ? 'auto' : wanted)
   const forced = forceArgs(look.args, mode)
   const backdrop = forced.backdrop
   const args =
@@ -303,7 +305,14 @@ async function apply($: EngineInterface, name: string): Promise<string> {
   const set = await $.theme.set(args)
 
   const version = mode === 'auto' ? '' : ` (${mode})`
-  const note = wanted !== mode ? ` It has no ${wanted} version yet, so it follows the app's mode.` : ''
+  const note =
+    only !== undefined
+      ? wanted !== 'auto' && wanted !== only
+        ? ` It only comes in ${only}.`
+        : ''
+      : wanted !== mode
+        ? ` It has no ${wanted} version yet, so it follows the app's mode.`
+        : ''
 
   return set.isDrawn ? `Skin set to ${look.label}${version}.${note}` : `${look.label} is set, but nothing draws it here: ${set.reason}`
 }

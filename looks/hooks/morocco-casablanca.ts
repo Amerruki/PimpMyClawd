@@ -22,14 +22,7 @@ const { theme, problems } = makeColors({
   light: {
     roles: { accent: '#0f7262' },
     gray: {
-      anchors: {
-        'surface-0': '#f1eee8',
-        'surface-1': '#f6f4ef',
-        'surface-2': '#fbfaf7',
-        'text-primary': '#1b211f',
-        'text-secondary': '#39423f',
-        'text-muted': '#56605c',
-      },
+      anchors: { 'surface-0': '#e7f0ef', 'surface-1': '#eff6f5', 'surface-2': '#f7fbfa', 'text-primary': '#10201e', 'text-secondary': '#2f403d', 'text-muted': '#4d5f5b' },
     },
   },
   dark: {

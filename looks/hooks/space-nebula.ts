@@ -21,18 +21,11 @@ import { stillScene } from './still'
 // warm grey with cream where the light lands.
 const { theme, problems } = makeColors({
   label: 'Nebula',
-  codeTheme: { light: 'github-light', dark: 'tokyo-night' },
+  codeTheme: { light: 'catppuccin-latte', dark: 'tokyo-night' },
   roles: { accent: '#b3245f', danger: '#c8322f', success: '#2f8f4e', warning: '#a86f00', pro: '#2f6fb8' },
   light: {
     gray: {
-      anchors: {
-        'surface-0': '#f1ecec',
-        'surface-1': '#f6f2f1',
-        'surface-2': '#fbf9f7',
-        'text-primary': '#211a20',
-        'text-secondary': '#433a43',
-        'text-muted': '#5f555f',
-      },
+      anchors: { 'surface-0': '#ece6f1', 'surface-1': '#f3eff7', 'surface-2': '#faf8fc', 'text-primary': '#1c1426', 'text-secondary': '#3c3150', 'text-muted': '#5a4f6e' },
     },
   },
   dark: {

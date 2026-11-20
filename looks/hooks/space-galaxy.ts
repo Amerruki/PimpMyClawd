@@ -18,18 +18,11 @@ import type { Look } from './look'
 // the same structure as a warm overexposed plate.
 const { theme, problems } = makeColors({
   label: 'Milky Way',
-  codeTheme: { light: 'github-light', dark: 'tokyo-night' },
+  codeTheme: { light: 'catppuccin-latte', dark: 'tokyo-night' },
   roles: { accent: '#2f58c4', danger: '#c93434', success: '#2c8a48', warning: '#a86f00', pro: '#8a48c8' },
   light: {
     gray: {
-      anchors: {
-        'surface-0': '#f1ede5',
-        'surface-1': '#f6f3ed',
-        'surface-2': '#fbf9f5',
-        'text-primary': '#171a28',
-        'text-secondary': '#383d52',
-        'text-muted': '#555b74',
-      },
+      anchors: { 'surface-0': '#e7e8f3', 'surface-1': '#eff0f8', 'surface-2': '#f7f7fc', 'text-primary': '#141629', 'text-secondary': '#33364f', 'text-muted': '#51546e' },
     },
   },
   dark: {
